@@ -1,4 +1,4 @@
-# Loja Integrada API Wrapper
+# Bling ERP API Wrapper
 
 A simple Python API Wrapper for [Bling ERP](https://bling.com.br/).
 
