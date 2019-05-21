@@ -14,7 +14,7 @@ def test_should_call_make_request_with_sendEmail_param(mocker):
     mock_make_request = mocker.patch.object(Api, '_make_request')
 
     api = Api(api_key='fake-api-key')
-    resp = api.issue_invoice(12345, 1)
+    api.issue_invoice(12345, 1)
 
     mock_make_request.assert_called_with(
         'POST', '/notafiscal',
