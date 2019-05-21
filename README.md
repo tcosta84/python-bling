@@ -20,16 +20,16 @@ $ pip install git+https://git@github.com/tcosta84/python-bling.git
 
 ``` python
 
-from bling import Api
+from bling import Api, ApiError
 
 api = Api('your-api-key')
 
 try:
-	invoices = api.get_invoices(issued_date=[])
+	invoices = api.get_invoices(issued_date=['01/05/2019', '31/05/2019'], situation=7, type='S')
 	for invoice in invoices:
 		print(invoice['numero'])
 except ApiError as e:
-	print(e.value.response)
+	print(e.response)
 
 ```
 
