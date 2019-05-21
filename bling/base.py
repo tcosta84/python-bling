@@ -13,13 +13,8 @@ class Api(object):
         """
         Parameters:
         -----------
-
             api_key (str):
                 Your api key
-
-            rate_limit_retry_delay (int):
-                How many seconds to wait between retries.
-                Defaults to 10.
         """
 
         self.api_key = api_key
