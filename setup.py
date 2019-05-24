@@ -13,7 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=['bling'],
-    install_required=['requests'],
+    install_requires=['requests'],
     zip_safe=False,
     classifiers=[
         "Programming Language :: Python :: 3",
