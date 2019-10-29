@@ -50,6 +50,24 @@ class Api(object):
 
         return self._get_objects('notasfiscais', 'notafiscal', params)
 
+    def get_products(self, type=None, situation=None):
+        filters = []
+        params = {}
+
+        if type:
+            filter = 'tipo[{}]'.format(type)
+            filters.append(filter)
+
+        if situation:
+            filter = 'situacao[{}]'.format(situation)
+            filters.append(filter)
+
+        if len(filters):
+            filters_value = ';'.join(filters)
+            params = {'filters': filters_value}
+
+        return self._get_objects('produtos', 'produto', params)
+
     def get_order(self, number):
         uri = '/pedido/{}'.format(number)
         resp = self._make_request('GET', uri)
