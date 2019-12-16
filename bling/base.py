@@ -192,6 +192,28 @@ class Api(object):
 
         return self._get_objects('contasreceber', 'contaReceber', params)
 
+    def update_product(self, code, xml):
+        """
+        Possible error returns:
+
+        {'retorno': {'erros': {'42': 'Nao foi possivel atualizar o produto - Produto nao encontrado no sistema'}}}
+
+        {'retorno': {'produtos': [[{'produto': {'id': '5191811428',
+      'codigo': 'TESTE-THIAGO',
+      ...
+        }}]]}}
+        """
+        uri = '/produto/{}'.format(code)
+        payload = {
+            'xml': xml
+        }
+        resp = self._make_request('POST', uri, data=payload)
+        return resp
+
+    def update_stock(self, code, qty):
+        xml = '<produto><codigo>{}</codigo><estoque>{}</estoque></produto>'.format(code, qty)
+        return self.update_product(code, xml)
+
     def _get_objects(self, resource, root_elem, params=None):
         objs = []
         page = 1
