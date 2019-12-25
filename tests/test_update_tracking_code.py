@@ -1,7 +1,7 @@
 from bling import Api
 
 
-def test_should_update_stock(mocker):
+def test_should_update_tracking_code(mocker):
     mock_make_request = mocker.patch.object(Api, '_make_request')
 
     nf_number = '12345'
