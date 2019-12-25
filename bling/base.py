@@ -214,6 +214,50 @@ class Api(object):
         xml = '<produto><codigo>{}</codigo><estoque>{}</estoque></produto>'.format(code, qty)
         return self.update_product(code, xml)
 
+    def get_logistics(self):
+        """
+        Response example:
+        -----------------------------------------------------------------------
+         {'id_logistica': '57389',
+          'descricao': 'YellowLog Expresso',
+          'servicos': [{'servico': {'id_servico': '6632564700',
+             'descricao': 'Expresso',
+             'frete_item': '0.0000000000',
+             'est_entrega': '0',
+             'codigo': '',
+             'id_transportadora': '6330550442',
+             'aliases': [{'alias': 'Expresso'}, {'alias': 'YEL_EX'}]}}]}]
+        """
+        uri = '/logisticas/servicos'
+        resp = self._make_request('GET', uri)
+
+        objs = []
+        for item in resp['retorno']['logisticas'][0]:
+            objs.append(item['logistica'])
+
+        return objs
+
+    def update_tracking_code(self, nf_number, nf_series, service_id, tracking):
+        """
+        Response example:
+        -----------------------------------------------------------------------
+        {'retorno': {'logisticas': [{'notafiscal': {'numero': '52216',
+             'serie': '1',
+             'rastreamentos': [{'rastreamento': {'id_servico': '6330635411',
+                'codigo': '3520210'}}]}}]}}
+        """
+        uri = '/logistica/rastreamento/notafiscal/{}/{}'.format(
+            nf_number, nf_series
+        )
+        xml = '<rastreamentos><rastreamento><id_servico>{}</id_servico><codigo>{}</codigo></rastreamento></rastreamentos>'.format(
+            service_id, tracking
+        )
+        payload = {
+            'xml': xml
+        }
+        resp = self._make_request('POST', uri, data=payload)
+        return resp
+
     def _get_objects(self, resource, root_elem, params=None):
         objs = []
         page = 1
@@ -222,7 +266,8 @@ class Api(object):
             try:
                 uri = '/{}/page={}'.format(resource, page)
                 resp = self._make_request('GET', uri, params=params)
-                for item in resp['retorno'][resource]:
+                items = resp['retorno'][resource]
+                for item in items:
                     objs.append(item[root_elem])
                 page += 1
             except KeyError:
