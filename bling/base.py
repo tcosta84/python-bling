@@ -50,9 +50,37 @@ class Api(object):
 
         return self._get_objects('notasfiscais', 'notafiscal', params)
 
-    def get_products(self, type=None, situation=None):
+    def get_products(
+        self, creation_date=None, modification_date=None,
+        store_creation_date=None, store_modification_date=None,
+        type=None, situation=None, stock='S', image='N', store_code=None
+    ):
         filters = []
-        params = {}
+        params = dict()
+
+        if creation_date:
+            filter = 'dataInclusao[{} TO {}]'.format(
+                creation_date[0], creation_date[1]
+            )
+            filters.append(filter)
+
+        if modification_date:
+            filter = 'dataAlteracao[{} TO {}]'.format(
+                modification_date[0], modification_date[1]
+            )
+            filters.append(filter)
+
+        if store_creation_date:
+            filter = 'dataInclusaoLoja[{} TO {}]'.format(
+                store_creation_date[0], store_creation_date[1]
+            )
+            filters.append(filter)
+
+        if store_modification_date:
+            filter = 'dataAlteracaoLoja[{} TO {}]'.format(
+                store_modification_date[0], store_modification_date[1]
+            )
+            filters.append(filter)
 
         if type:
             filter = 'tipo[{}]'.format(type)
@@ -62,9 +90,15 @@ class Api(object):
             filter = 'situacao[{}]'.format(situation)
             filters.append(filter)
 
+        params['estoque'] = stock
+        params['imagem'] = image
+
+        if store_code:
+            params['loja'] = store_code
+
         if len(filters):
             filters_value = ';'.join(filters)
-            params = {'filters': filters_value}
+            params['filters'] = filters_value
 
         return self._get_objects('produtos', 'produto', params)
 
