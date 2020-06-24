@@ -160,6 +160,20 @@ class Api(object):
         resp = self._make_request('POST', uri, data=payload)
         return resp
 
+    def update_order_situation(self, number, situation_id):
+        uri = '/pedido/%s' % number
+        xml = '<pedido><idSituacao>%s</idSituacao></pedido>' % situation_id
+        payload = {
+            'xml': xml,
+        }
+        resp = self._make_request('PUT', uri, params=payload)
+        return resp
+
+    def get_situations(self, module):
+        uri = '/situacao/%s' % module
+        resp = self._make_request('GET', uri)
+        return resp['retorno']['situacoes']
+
     def issue_invoice(self, number, series, send_email=True):
         uri = '/notafiscal'
         data = {
