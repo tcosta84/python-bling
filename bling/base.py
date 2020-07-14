@@ -21,10 +21,21 @@ class Api(object):
         self.root_uri = 'https://bling.com.br/Api/v2'
         self.session = requests.Session()
 
-    def get_invoice(self, number, series):
+    def get_invoice(self, number, series, nf_type='S'):
         uri = '/notafiscal/{}/{}'.format(number, series)
         resp = self._make_request('GET', uri)
-        return resp['retorno']['notasfiscais'][0]['notafiscal']
+        # return resp['retorno']['notasfiscais'][0]['notafiscal']
+        for item in resp['retorno']['notasfiscais']:
+            nf = item['notafiscal']
+            if nf['tipo'] == nf_type:
+                return nf
+
+    # def get_invoice_saida(self, number, series):
+    #     uri = '/notafiscal/{}/{}'.format(number, series)
+    #     resp = self._make_request('GET', uri)
+    #     for nf in resp['retorno']['notasfiscais']:
+    #         if nf['tipo'] == 'S':
+    #             return nf
 
     def get_invoices(self, issued_date=None, situation=None, type=None):
         filters = []
