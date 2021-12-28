@@ -1,6 +1,7 @@
 import logging
 
 import requests
+import time
 
 
 logger = logging.getLogger(__name__)
@@ -333,15 +334,36 @@ class Api(object):
         logger.info('data = {}'.format(data))
         url = '{}{}/json/?apikey={}'.format(self.root_uri, uri, self.api_key)
         logger.info('url = {}'.format(url))
-        try:
-            resp = self.session.request(method, url, data=data, params=params)
-            logger.debug(resp)
-            resp.raise_for_status()
-            return resp.json()
-        except requests.exceptions.HTTPError as e:
-            raise ApiError(e.request, e.response)
-        except requests.exceptions.RequestException as e:
-            raise ApiError(e.request)
+
+        retry_counter = 0
+        while True:
+            try:
+                resp = self.session.request(
+                    method, url, data=data, params=params
+                )
+                logger.debug(resp)
+                resp.raise_for_status()
+                return resp.json()
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429:
+                    logger.info('Rate limit reached.')
+
+                    retry_counter += 1
+
+                    logger.info('Retry #{}'.format(retry_counter))
+
+                    sleep_time = self.rate_limit_retry_delay
+                    logger.info(
+                        'Sleeping for {} seconds before retrying ...'.format(
+                            sleep_time
+                        )
+                    )
+                    time.sleep(sleep_time)
+                    logger.info('Waking up ... Ready to retry.')
+                else:
+                    raise ApiError(e.request, e.response)
+            except requests.exceptions.RequestException as e:
+                raise ApiError(e.request)
 
 
 class ApiError(Exception):
