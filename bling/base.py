@@ -329,15 +329,16 @@ class Api(object):
         return objs
 
     def _make_request(self, method, uri, params=None, data=None):
-        logger.info('method = {}'.format(method))
-        logger.info('uri = {}'.format(uri))
-        logger.info('params = {}'.format(params))
-        logger.info('data = {}'.format(data))
-        url = '{}{}/json/?apikey={}'.format(self.root_uri, uri, self.api_key)
-        logger.info('url = {}'.format(url))
-
         retry_counter = 0
         while True:
+            logger.info('method = {}'.format(method))
+            logger.info('uri = {}'.format(uri))
+            logger.info('params = {}'.format(params))
+            logger.info('data = {}'.format(data))
+            url = '{}{}/json/?apikey={}'.format(
+                self.root_uri, uri, self.api_key
+            )
+            logger.info('url = {}'.format(url))
             try:
                 resp = self.session.request(
                     method, url, data=data, params=params
