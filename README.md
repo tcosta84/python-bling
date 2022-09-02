@@ -6,9 +6,7 @@ A simple Python API Wrapper for [Bling ERP](https://bling.com.br/).
 
 Via Pip:
 
-``` bash
-$ pip install bling
-```
+Not available yet.
 
 Via GIT:
 
