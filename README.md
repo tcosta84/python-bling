@@ -33,15 +33,9 @@ except ApiError as e:
 
 ```
 
-## Testing
+## Issues
 
-``` bash
-$ make test
-```
-
-## Security
-
-If you discover any security related issues, please email thiagodacostabr@gmail.com instead of using the issue tracker.
+Issues or new features can be reported via the [issue tracker](https://github.com/tcosta84/python-bling/issues). Please make sure your issue or feature has not yet been reported by anyone else before submitting a new one.
 
 ## Contributing
 
@@ -62,6 +56,12 @@ Configure development requirements:
 
 ``` bash
 $ pip install -r requirements.txt
+```
+
+Testing:
+
+``` bash
+$ make test
 ```
 
 ## Credits
