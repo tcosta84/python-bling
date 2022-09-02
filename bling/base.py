@@ -311,6 +311,29 @@ class Api(object):
         resp = self._make_request('POST', uri, data=payload)
         return resp
 
+    def get_payment_methods(self):
+        """
+        Response example:
+        -----------------------------------------------------------------------
+        [{
+            "id": "1",
+            "descricao": "Dinheiro",
+            "codigoFiscal": "1",
+            "padrao": "0",
+            "situacao": 1
+        }]
+
+        Ref: https://ajuda.bling.com.br/hc/pt-br/articles/360046309874-GET-formaspagamento
+        """
+        uri = '/formaspagamento'
+        resp = self._make_request('GET', uri)
+
+        objs = []
+        for item in resp['retorno']['formaspagamento']:
+            objs.append(item['formapagamento'])
+
+        return objs
+
     def _get_objects(self, resource, root_elem, params=None):
         objs = []
         page = 1
