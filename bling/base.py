@@ -10,7 +10,10 @@ logger = logging.getLogger(__name__)
 class Api(object):
     """A Python API Wrapper for Bling ERP."""
 
-    def __init__(self, api_key, rate_limit_retry_delay=10):
+    def __init__(
+        self, api_key, rate_limit_retry_delay=10,
+        root_uri='https://bling.com.br/Api/v2'
+    ):
         """
         Parameters:
         -----------
@@ -19,7 +22,8 @@ class Api(object):
         """
 
         self.api_key = api_key
-        self.root_uri = 'https://bling.com.br/Api/v2'
+        self.root_uri = root_uri
+        # self.root_uri = 'https://bling.com.br/Api/v2'
         self.rate_limit_retry_delay = rate_limit_retry_delay
         self.session = requests.Session()
 

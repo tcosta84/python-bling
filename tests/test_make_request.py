@@ -85,3 +85,15 @@ def test_should_raise_ApiError_when_a_RequestException_occurs(mocker):
 
     assert e.value.request == request
     assert e.value.response == None
+
+
+def test_should_use_custom_root_uri(mocker):
+    mock_request = mocker.patch('bling.base.requests.Session.request')
+
+    api = Api(api_key='fake-api-key', root_uri='https://bling.com.br/b/Api/v2')
+    api._make_request('POST', '/pedido', params={})
+
+    mock_request.assert_called_with(
+        'POST', 'https://bling.com.br/b/Api/v2/pedido/json/?apikey=fake-api-key',
+        params={}, data=None
+    )
